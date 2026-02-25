@@ -141,6 +141,9 @@ const MainScreen = ({ navigation }: any) => {
           ) : null
         }
       />
+      <TouchableOpacity style={styles.filterBtn} onPress={() => loadMore()}>
+        <Text style={styles.btnText1}>Load More</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -175,10 +178,16 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     borderRadius: 8, // border radius
     marginRight: 8,
+    marginTop: 5,
   },
 
   btnText: {
     color: '#333',
     fontSize: 14,
+  },
+  btnText1: {
+    color: '#333',
+    fontSize: 14,
+    textAlign: 'center',
   },
 });

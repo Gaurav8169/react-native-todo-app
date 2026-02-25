@@ -1,5 +1,12 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { View, FlatList, Text, Button, StyleSheet } from 'react-native';
+import {
+  View,
+  FlatList,
+  Text,
+  Button,
+  StyleSheet,
+  TouchableOpacity,
+} from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, AppDispatch } from '../store/store';
 import { LayoutAnimation } from 'react-native';
@@ -72,22 +79,45 @@ const MainScreen = ({ navigation }: any) => {
       {/* Add Button */}
       <Button title="Add Todo" onPress={() => navigation.navigate('AddTodo')} />
 
-      {/* Filter Section */}
       <View style={styles.row}>
         <Text style={styles.label}>Filter:</Text>
-        <Button title="All" onPress={() => dispatch(setFilter('ALL'))} />
-        <Button title="Active" onPress={() => dispatch(setFilter('ACTIVE'))} />
-        <Button title="Done" onPress={() => dispatch(setFilter('DONE'))} />
+
+        <TouchableOpacity
+          style={styles.filterBtn}
+          onPress={() => dispatch(setFilter('ALL'))}
+        >
+          <Text style={styles.btnText}>All</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.filterBtn}
+          onPress={() => dispatch(setFilter('ACTIVE'))}
+        >
+          <Text style={styles.btnText}>Active</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.filterBtn}
+          onPress={() => dispatch(setFilter('DONE'))}
+        >
+          <Text style={styles.btnText}>Done</Text>
+        </TouchableOpacity>
       </View>
 
-      {/* Sort Section */}
       <View style={styles.row}>
         <Text style={styles.label}>Sort:</Text>
-        <Button title="By ID" onPress={() => dispatch(setSort('ID'))} />
-        <Button
-          title="Most Recent"
+        <TouchableOpacity
+          style={styles.filterBtn}
+          onPress={() => dispatch(setSort('ID'))}
+        >
+          <Text style={styles.btnText}>By ID</Text>
+        </TouchableOpacity>{' '}
+        <TouchableOpacity
+          style={styles.filterBtn}
           onPress={() => dispatch(setSort('RECENT'))}
-        />
+        >
+          <Text style={styles.btnText}>Most Recent</Text>
+        </TouchableOpacity>
       </View>
 
       {/* List */}
@@ -137,5 +167,18 @@ const styles = StyleSheet.create({
   label: {
     marginRight: 5,
     fontWeight: '600',
+  },
+
+  filterBtn: {
+    backgroundColor: '#e0e0e0', // grey background
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 8, // border radius
+    marginRight: 8,
+  },
+
+  btnText: {
+    color: '#333',
+    fontSize: 14,
   },
 });

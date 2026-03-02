@@ -24,7 +24,11 @@ const MainScreen = ({ navigation }: any) => {
   const { todos, filter, sortBy, page, loading } = useSelector(
     (state: RootState) => state.todos,
   );
-
+  const [
+    onEndReachedCalledDuringMomentum,
+    setOnEndReachedCalledDuringMomentum,
+  ] = useState(false);
+  const [isUserScrolling, setIsUserScrolling] = useState(false);
   useEffect(() => {
     dispatch(fetchTodos(1));
   }, []);
@@ -121,7 +125,7 @@ const MainScreen = ({ navigation }: any) => {
       </View>
 
       {/* List */}
-      <FlatList
+      {/* <FlatList
         data={visibleTodos}
         keyExtractor={item => item.id.toString()}
         renderItem={({ item }) => (
@@ -135,6 +139,42 @@ const MainScreen = ({ navigation }: any) => {
         showsVerticalScrollIndicator={false}
         onEndReached={loadMore}
         onEndReachedThreshold={0.5}
+        ListFooterComponent={
+          loading ? (
+            <Text style={{ textAlign: 'center' }}>Loading...</Text>
+          ) : null
+        }
+      /> */}
+      <FlatList
+        data={visibleTodos}
+        keyExtractor={item => item.id.toString()}
+        renderItem={({ item }) => (
+          <TodoItem
+            item={item}
+            onToggle={() => handleToggle(item.id)}
+            onDelete={() => handleDelete(item.id)}
+            onEdit={() => navigation.navigate('AddTodo', { todo: item })}
+          />
+        )}
+        showsVerticalScrollIndicator={false}
+        onScrollBeginDrag={() => setIsUserScrolling(true)}
+        onMomentumScrollBegin={() => setOnEndReachedCalledDuringMomentum(false)}
+        onMomentumScrollEnd={() => {
+          setIsUserScrolling(false); // 🔴 important fix
+        }}
+        onEndReached={() => {
+          if (
+            isUserScrolling &&
+            !onEndReachedCalledDuringMomentum &&
+            !loading &&
+            visibleTodos.length >= 10
+          ) {
+            loadMore();
+            setOnEndReachedCalledDuringMomentum(true);
+            setIsUserScrolling(false);
+          }
+        }}
+        onEndReachedThreshold={0.2}
         ListFooterComponent={
           loading ? (
             <Text style={{ textAlign: 'center' }}>Loading...</Text>
